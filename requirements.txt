@@ -1,0 +1,10 @@
+Flask
+pandas
+openpyxl
+scikit-learn
+numpy
+werkzeug
+Flask-Uploads
+virtualenv
+gunicorn
+flask-cors

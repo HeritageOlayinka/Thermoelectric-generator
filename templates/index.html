@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thermoelectric Property Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #0d253f, #133b5c);
+            color: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 25px;
+            color: #f9aa33;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        h2 {
+            font-size: 2.2em;
+            margin: 30px 0 25px;
+            color: #ffa726;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        form {
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 450px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            text-align: left;
+        }
+
+        label {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            display: block;
+            color: #ffd54f;
+        }
+
+        input[type="text"], input[type="number"], input[type="file"] {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin: 10px 0 25px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: #f8f9fa;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 1em;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        button {
+            background: linear-gradient(to right, #ff7043, #ff5252);
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s, background 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #ff5722, #f44336);
+            transform: translateY(-2px);
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.6);
+            margin: 40px auto;
+            width: 85%;
+        }
+
+        .info {
+            font-size: 1em;
+            color: #ffd740;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .download-link {
+            display: block;
+            margin: 25px 0;
+            color: #ffcc80;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+
+        .download-link:hover {
+            color: #fff59d;
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading {
+            display: none;
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spinner 0.8s linear infinite;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                padding: 20px;
+                width: 90%;
+            }
+
+            h1, h2 {
+                font-size: 2em;
+            }
+
+            button {
+                font-size: 1em;
+            }
+
+            .download-link {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+    <script>
+        function showLoading(button, spinnerId) {
+            const loadingSpinner = document.getElementById(spinnerId);
+            button.disabled = true; // Disable the button
+            button.style.opacity = "0.7"; // Optional: visually indicate the button is disabled
+            button.style.cursor = "not-allowed"; // Change the cursor to indicate the button is inactive
+            loadingSpinner.style.display = 'block'; // Show the corresponding loading spinner
+        }
+    </script>
+    
+</head>
+<body>
+    <h1>Thermoelectric Property Predictor</h1>
+
+    <form action="/predict" method="post" onsubmit="showLoading(this.querySelector('button'), 'loading-spinner-single')">
+        <label for="formula">Chemical Formula:</label>
+        <input type="text" id="formula" name="formula" required placeholder="Enter formula">
+
+        <label for="temperature">Temperature (K):</label>
+        <input type="number" id="temperature" name="temperature" required placeholder="Enter temperature">
+
+        <button type="submit">Predict</button>
+        <div id="loading-spinner-single" class="loading"></div>
+    </form>
+
+    <hr>
+
+    <h2>Batch Prediction</h2>
+    <form action="/predict_file" method="post" enctype="multipart/form-data" onsubmit="showLoading(this.querySelector('button'), 'loading-spinner-batch')">
+        <label for="file">Upload File (CSV or XLSX):</label>
+        <input type="file" id="file" name="file" accept=".csv,.xlsx" required>
+        <p class="info">Supported formats: .csv, .xlsx | Max file size: 5MB</p>
+
+        <button type="submit">Upload and Predict</button>
+        <div id="loading-spinner-batch" class="loading"></div>
+    </form>
+
+    <a href="https://4e7ead36-0405-4713-b019-56ed35581dec-00-1tr3l7s5s5cox.janeway.replit.dev/download/input-to-predict.xlsx" class="download-link" download>
+        Download Template Excel File
+    </a>
+</body>
+</html>
